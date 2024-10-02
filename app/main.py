@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from .users import fastapi_users, jwt_authentication
+from .users import fastapi_users, auth_backend
 
 app = FastAPI()
 
 app.include_router(
-    fastapi_users.get_auth_router(jwt_authentication), prefix="/auth/jwt", tags=["auth"]
+    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
 )
 app.include_router(
     fastapi_users.get_register_router(), prefix="/auth", tags=["auth"]
