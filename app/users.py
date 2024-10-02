@@ -1,19 +1,17 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_users import FastAPIUsers
-from fastapi_users.db import SQLAlchemyUserDatabase, SQLAlchemyUserDatabaseAsync
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from .db import get_session
-from .models import User, UserCreate, UserUpdate, UserDB
+from .models import User, UserRead, UserCreate, UserUpdate
 
-# Secret for JWT authentication
 SECRET = "SECRET"
 
 
-# Dependency to get the SQLAlchemy User Database
+# SQLAlchemy User Database Dependency
 async def get_user_db(session: AsyncSession = Depends(get_session)):
-    yield SQLAlchemyUserDatabaseAsync(session, User)
+    yield SQLAlchemyUserDatabase(session, User)
 
 
 # JWT Strategy
@@ -32,7 +30,7 @@ auth_backend = AuthenticationBackend(
 )
 
 # FastAPI Users setup
-fastapi_users = FastAPIUsers[User, UserCreate, UserUpdate, UserDB](
+fastapi_users = FastAPIUsers[User, UserCreate](
     get_user_db,
     [auth_backend],
 )
