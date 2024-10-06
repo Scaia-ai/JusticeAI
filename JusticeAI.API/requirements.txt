@@ -1,0 +1,17 @@
+fastapi
+python-dotenv
+opencensus
+opencensus-ext-azure
+gunicorn
+uvicorn
+tiktoken
+unstructured
+azure-identity
+python-multipart
+langchain-community
+langchain-openai
+langchain
+azure-search-documents
+azure-search
+psutil
+retry
