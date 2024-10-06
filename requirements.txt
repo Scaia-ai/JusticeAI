@@ -1,7 +1,0 @@
-fastapi
-fastapi-users[sqlalchemy2]
-sqlalchemy
-aiosqlite
-alembic
-httpx
-fastapi-users-db-sqlalchemy
