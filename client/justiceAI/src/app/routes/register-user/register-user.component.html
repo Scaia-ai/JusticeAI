@@ -1,0 +1,97 @@
+<div class="register-container">
+  <div class="register-content">
+    <img src="../../../assets/Logo.png" />
+
+    <p-card header="Sign Up" [style]="{ width: '360px' }">
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit(registerForm.value)"
+      >
+        <input
+          type="text"
+          pInputText
+          formControlName="username"
+          autofocus
+          type="text"
+          placeholder="Username"
+        />
+        <input
+          type="text"
+          pInputText
+          placeholder="Email"
+          formControlName="email"
+        />
+        <div
+          class="alert"
+          *ngIf="
+            !registerForm.get('email').valid &&
+            registerForm.get('email').touched
+          "
+        >
+          Invalid email
+        </div>
+        <input
+          type="text"
+          pInputText
+          placeholder="First Name"
+          formControlName="firstName"
+        />
+        <input
+          type="text"
+          pInputText
+          placeholder="Last Name"
+          formControlName="lastName"
+        />
+        <p-inputMask
+          mask="(999) 999-9999"
+          placeholder="Phone Number. Ex. (999) 999-9999"
+          formControlName="phoneNumber"
+        />
+        <input
+          type="password"
+          autocomplete="false"
+          pInputText
+          placeholder="Password"
+          formControlName="password"
+        />
+        <input
+          type="password"
+          autocomplete="false"
+          pInputText
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+        />
+        <div
+          class="alert"
+          *ngIf="
+            !registerForm.get('password').valid &&
+            registerForm.get('password').touched
+          "
+        >
+          Password must contain more than 8 characters, at least 1 lower and
+          upper case letter, 1 number, and 1 special character
+        </div>
+        <div
+          class="alert"
+          *ngIf="
+            registerForm.get('password').value !=
+            registerForm.get('confirmPassword').value
+          "
+        >
+          * Password confirmation does not match.
+        </div>
+        <br />
+        <small>
+          By clicking Sign Up, you agree to our Terms, Privacy Policy and
+          Cookies Policy
+        </small>
+        <p-button type="submit" size="small" class="signup" severity="success">
+          SIGN UP
+        </p-button>
+        <p-button type="button" size="small" class="cancel" (click)="cancel()">
+          CANCEL
+        </p-button>
+      </form>
+    </p-card>
+  </div>
+</div>

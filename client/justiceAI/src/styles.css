@@ -1,0 +1,41 @@
+html {
+    font-size: 14px;
+  }
+  
+  body {
+    overflow: hidden !important;
+    height: 100%;
+    font-family: var(--font-family);
+    font-weight: normal;
+    background: var(--surface-ground);
+    color: var(--text-color);
+    padding: 0 1rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .p-datatable .p-datatable-tbody > tr > td,
+  .p-datatable .p-datatable-thead > tr > th {
+    padding: 0.5rem 1rem;
+  }
+  
+  td > .p-button.p-button-icon-only.p-button-rounded {
+    height: 2rem;
+  }
+  
+  .p-column-filter {
+    float: right;
+  }
+  
+  p-dropdown.ng-touched.ng-invalid > .p-dropdown {
+    border: solid 1px red;
+  }
+  
+  input.ng-touched.ng-invalid {
+    border: 1px solid red;
+  }
+  
+  .p-fileupload.ng-invalid {
+    border: 1px solid red;
+  }
+  
