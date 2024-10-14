@@ -67,7 +67,3 @@ input.ng-touched.ng-invalid {
   border: 1px solid red;
 }
 
-.login
-{
-  background-color: rgb(95, 95, 95);
-}
