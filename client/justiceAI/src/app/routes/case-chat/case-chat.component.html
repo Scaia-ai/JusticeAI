@@ -1,0 +1,27 @@
+<div class="chat-container">
+  <div class="chat-box">
+    <div
+      *ngFor="let message of case?.chat"
+      class="chat-message"
+      [ngClass]="{
+        'user-message': message.isQuestion,
+        'bot-message': !message.isQuestion
+      }"
+    >
+      <p>{{ message.text }}</p>
+    </div>
+  </div>
+  <div class="chat-input">
+    <form [formGroup]="justiceAIForm" (ngSubmit)="onSubmit()">
+      <input
+        type="text"
+        pInputText
+        formControlName="question"
+        autofocus
+        type="text"
+        placeholder="Type your question..."
+      />
+      <p-button type="submit" label="Send" icon="pi pi-send"></p-button>
+    </form>
+  </div>
+</div>

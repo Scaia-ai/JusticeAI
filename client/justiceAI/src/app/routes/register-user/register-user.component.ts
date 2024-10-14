@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, Inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -55,9 +55,14 @@ export class RegisterUserComponent {
   constructor(
     private router: Router,
     private messageService: MessageShowService,
-    private userService: UserService
+    private userService: UserService,
+    @Inject(DOCUMENT) private document: any,
+
   ) {}
 
+  ngAfterViewInit() {
+    this.document.querySelector('body').classList.add('register');
+  }
   async onSubmit(user: RegistrationUser): Promise<void> {
     this.registerForm.markAllAsTouched();
     if (!this.registerForm.valid) {

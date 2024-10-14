@@ -172,10 +172,10 @@ async def store_content(case_id: str = Form(...), content: str = Form(...), sour
 
 
 @app.post("/store_document/", status_code=201, summary="Store a document for a Case")
-async def store_document(case_id: str = Form(...), document: UploadFile = Form(...), document_id: int = Form(...)):
+async def store_document(case_id: str = Form(...), document: UploadFile = Form(...), document_id: str = Form(...)):
     try:
         logger.info("****store document")
-        if document_id is None or document_id == 0:
+        if document_id is None or document_id == '':
             source = document.filename
         else:
             source = str(document_id)
@@ -207,5 +207,18 @@ async def clean_case_index(case_id: str = Form(...)):
         search_client.delete_documents(documents=[{"id": doc_id}])
 
     return {"message": "Index cleaned successfully"}
+
+
+@app.post("/remove_document_case_index/", status_code=201, summary="Remove document for a Case")
+async def remove_document_case_index(case_id: str = Form(...), document_id: str = Form(...)):
+    search_client = SearchClient(global_config.ENDPOINT, global_config.INDEX_NAME, AzureKeyCredential(global_config.KEY_CREDENTIAL))
+    filter_expression = f"case_id eq '{case_id}' and source eq '{document_id}'"
+    results = search_client.search("", filter=filter_expression)
+    document_ids = [result["id"] for result in results]
+    for doc_id in document_ids:
+        search_client.delete_documents(documents=[{"id": doc_id}])
+
+    return {"message": "Index cleaned successfully"}
+
 
 

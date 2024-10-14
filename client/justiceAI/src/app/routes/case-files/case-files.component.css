@@ -1,0 +1,12 @@
+.button-container
+{
+    text-align: center;
+    margin: 10px;
+}
+
+.blockUI-message {
+    color: white;
+    position: absolute;
+    top: calc(50% + 45px);
+  }
+  

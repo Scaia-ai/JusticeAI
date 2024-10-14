@@ -39,3 +39,17 @@ html {
     border: 1px solid red;
   }
   
+.p-fileupload .p-fileupload-content
+{
+    padding: 0px;
+}
+
+.p-fileupload .p-fileupload-buttonbar
+{
+    padding: 10px;
+}
+
+.register
+{
+  overflow: auto !important;
+}

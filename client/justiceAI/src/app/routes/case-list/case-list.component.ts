@@ -13,6 +13,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
+import { CaseFilesComponent } from '../case-files/case-files.component';
+import { FileService } from 'src/app/services/file.service';
+import { CaseFile } from 'src/app/models/file';
+import { CaseChatComponent } from '../case-chat/case-chat.component';
 
 @Component({
   selector: 'app-case-list',
@@ -23,8 +27,10 @@ import { Router } from '@angular/router';
     DialogModule,
     CreateCaseComponent,
     ConfirmDialogModule,
+    CaseFilesComponent,
     BlockUIModule,
     ProgressSpinnerModule,
+    CaseChatComponent,
     PanelModule,
   ],
   providers: [
@@ -38,14 +44,18 @@ import { Router } from '@angular/router';
 })
 export class CaseListComponent implements OnInit {
   visible: boolean = false;
+  visible_files: boolean = false;
+  visible_chat: boolean =false;
   loading = false;
   cases: Case[] = [];
+  caseFiles: CaseFile[] = [];
   selectedCase: Case;
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageShowService,
     private router: Router,
     private caseService: CaseService,
+    private fileService: FileService,
     private authenticationService: AuthenticationService
   ) {}
 
@@ -59,6 +69,11 @@ export class CaseListComponent implements OnInit {
     } catch (errorResponse) {
       this.messageService.showError(errorResponse);
     }
+  }
+
+  openCaseChat(_case): void {
+    this.selectedCase = _case;
+    this.visible_chat = true;
   }
 
   createCase(): void {
@@ -91,8 +106,9 @@ export class CaseListComponent implements OnInit {
       acceptIcon: 'none',
       rejectIcon: 'none',
 
-      accept: () => {
-        this.caseService.deleteCase(caseId);
+      accept: async () => {
+        await this.caseService.deleteCase(caseId);
+        await this.caseService.removeCaseFromIndex(caseId);
         this.cases = this.cases.filter((_case) => _case._id !== caseId);
       },
       reject: () => {},
@@ -102,5 +118,21 @@ export class CaseListComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['login']);
+  }
+
+  async loadFiles(caseId) : Promise<CaseFile[]> {
+    try {
+      return await this.fileService.getFilesByCase(caseId);
+    } catch (errorResponse) {
+      this.messageService.showError(errorResponse);
+    }
+    return null;
+  }
+
+  async openCaseFiles(_case) 
+  {
+    this.caseFiles = await this.loadFiles(_case._id);
+    this.selectedCase = _case;
+    this.visible_files = true;
   }
 }

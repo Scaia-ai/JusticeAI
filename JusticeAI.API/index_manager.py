@@ -51,10 +51,11 @@ def get_vector_store():
             filterable=True,
             searchable=True,
         ),
-        SimpleField(
+        SearchableField(
             name="source",
             type=SearchFieldDataType.String,
             filterable=True,
+            searchable=True,
         ),
     ]
 

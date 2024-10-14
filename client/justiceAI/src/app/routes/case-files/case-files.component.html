@@ -1,0 +1,83 @@
+
+<div class="form-group">
+    <p-fileUpload
+      #fileUpload
+      [mode]="'advanced'"
+      [auto]="true"
+      [customUpload]="true"
+      name="demo[]"
+      size="small"
+      accept="application/pdf"
+      (uploadHandler)="onFileSelected($event)"
+      [multiple]="false"
+    >
+      <ng-template pTemplate="content">
+        <ul *ngIf="uploadedFiles.length">
+          <li *ngFor="let file of uploadedFiles">
+            {{ file.name }} - {{ file.size }} bytes
+          </li>
+        </ul>
+      </ng-template>
+    </p-fileUpload>
+  </div>
+  <p class="upload-error" *ngIf="fileError">Please select a file!</p>
+  <div class="button-container">
+    <p-button (onClick)="uploadFile()" size="small" severity="success">Upload</p-button>
+  </div>
+  
+  <div class="list-container">
+    <p-table
+      #dt2
+      [value]="files"
+      [rowHover]="true"
+      dataKey="id"
+      sortMode="multiple"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="name">
+            <div class="flex justify-content-between align-items-center">
+              Name
+              <p-sortIcon field="name" />
+              <p-columnFilter
+                type="text"
+                field="name"
+                display="menu"
+                class="ml-auto"
+              />
+            </div>
+          </th>
+          <th style="width: 10rem">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-file>
+        <tr>
+          <td>
+            {{ file.name }}
+          </td>
+          <td>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-trash"
+              (click)="deleteFile(file._id)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No Files found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-blockUI [blocked]="loading">
+    <p-progressSpinner ariaLabel="loading" />
+    <h3 class="blockUI-message">{{spinner_message}}</h3>
+  </p-blockUI>
+  
+  

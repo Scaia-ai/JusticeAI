@@ -3,7 +3,7 @@
   height: 100vh;
 }
 
-img{
+img {
   width: 250px;
 }
 
@@ -93,4 +93,9 @@ img{
   height: auto;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.login
+{
+  overflow: auto;
 }

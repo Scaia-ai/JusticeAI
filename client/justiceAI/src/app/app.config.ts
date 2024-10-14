@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { jwtInterceptor } from './interceptors/jwt.interceptor';
 import { UserService } from './services/user.service';
 import { MessageShowService } from './services/message-show.service';
+import { FileService } from './services/file.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     MessageShowService,
     UserService,
+    FileService,
     AuthenticationService,
     ConfirmationService,
     LocalStorageService,

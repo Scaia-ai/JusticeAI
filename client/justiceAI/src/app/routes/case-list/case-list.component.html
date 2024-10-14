@@ -55,14 +55,22 @@
           {{ case.number }}
         </td>
         <td>
-          <!-- <button
+          <button
             pButton
             pRipple
             type="button"
             icon="pi pi-file-pdf"
-            (click)="openOrderViewer(order.id)"
+            (click)="openCaseFiles(case)"
             class="p-button-rounded p-button-text"
-          ></button> -->
+          ></button>
+          <button
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-comment"
+          (click)="openCaseChat(case)"
+          class="p-button-rounded p-button-text"
+        ></button>
           <button
             pButton
             pRipple
@@ -91,9 +99,22 @@
     (createEvent)="saveCase($event)"
   ></app-create-case>
 </p-dialog>
-<p-blockUI [blocked]="loading">
-  <p-progressSpinner ariaLabel="loading" />
-  <h3 class="blockUI-message">Processing Case ...</h3>
-</p-blockUI>
+<p-dialog
+  header="Case Files"
+  [modal]="true"
+  [(visible)]="visible_files"
+  [style]="{ width: '60rem' }"
+>
+  <app-case-files [case]="selectedCase" [files]="caseFiles"
+  ></app-case-files>
+</p-dialog>
+<p-dialog
+  header="Justice AI"
+  [modal]="true"
+  [(visible)]="visible_chat"
+  [style]="{ width: '90%' }"
+>
+  <app-case-chat  [case]="selectedCase"></app-case-chat>
+</p-dialog>
 
 <p-confirmDialog />

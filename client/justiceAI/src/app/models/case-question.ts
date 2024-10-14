@@ -1,7 +1,7 @@
 import { Base } from './base';
 
-export class OrderQuestion extends Base {
+export class CaseQuestion extends Base {
   question: string;
-  orderId: number;
+  caseId: string;
   chatHistory: [][];
 }

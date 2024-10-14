@@ -7,6 +7,8 @@ import roleRoute from './routes/role.js'
 import authRoute from './routes/auth.js'
 import caseRoute from './routes/case.js'
 import fileRoute from './routes/file.js'
+import justiceaiRoute from './routes/justiceai.js'
+
 import cors from 'cors'
 const app = express();
 dotevn.config();
@@ -27,6 +29,7 @@ app.use("/api/role", roleRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/case", caseRoute);
 app.use("/api/file", fileRoute);
+app.use("/api/justiceai", justiceaiRoute);
 
 app.use((obj, req, res, next)=>{
     const statusCode = obj.status || 500;
