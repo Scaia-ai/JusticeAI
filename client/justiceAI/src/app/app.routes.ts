@@ -6,10 +6,10 @@ import { AuthenticationGuard } from './guards/authentication-guard';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterUserComponent },
+    // { path: 'register', component: RegisterUserComponent },
     { path: 'cases',
         canActivate: [AuthenticationGuard],
         component: CaseListComponent },
-    { path: '', redirectTo: 'cases', pathMatch: 'full' },
+    { path: '', redirectTo: 'cases', pathMatch: 'full' }
 
 ];

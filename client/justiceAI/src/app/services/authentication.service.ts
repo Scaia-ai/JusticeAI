@@ -34,6 +34,12 @@ export class AuthenticationService {
     return true;
   }
 
+  public async waitlist(email) {
+    const response = await firstValueFrom(
+      this.httpClient.post<UserLoginResponse>(this.apiUrl + '/api/auth/waitlist', {email: email})
+    );
+  }
+
   public async logout(): Promise<void> {
     if (!this.isUserAuthenticated()) {
       return;

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { createSuccess } from "../utils/success.js";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import Waitlist from "../models/Waitlist.js";
 
 export const register = async (req, res, next) => {
     try {
@@ -38,12 +39,12 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
     try {
-        var user = await User.findOne({email: req.body.username})
+        var user = await User.findOne({email: { $regex: new RegExp(`^${req.body.username}$`, 'i') }})
         .populate("roles", "role");
 
         if(!user)
         {
-            user = await User.findOne({username: req.body.username})
+            user = await User.findOne({username: { $regex: new RegExp(`^${req.body.username}$`, 'i') }})
             .populate("roles", "role");;
         }
         if(!user)
@@ -70,6 +71,24 @@ export const login = async (req, res, next) => {
             });
     } catch (error) {
         console.error("Error in login:", error);
+        return next(createError(500, "Internal Server Error."));
+    }
+};
+
+export const waitlist = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        var user = await Waitlist.findOne({email: { $regex: new RegExp(`^${email}$`, 'i') }})
+        if (user) {
+            return next(createSuccess(201, "User was already added to Wailist successfully."));
+        }
+        const newUser = new Waitlist({
+            email: email,
+        });
+        await newUser.save();
+        return next(createSuccess(201, "User added to Wailist successfully."));
+    } catch (error) {
+        console.error("Error in register:", error);
         return next(createError(500, "Internal Server Error."));
     }
 };

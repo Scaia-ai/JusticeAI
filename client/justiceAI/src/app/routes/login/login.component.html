@@ -1,7 +1,7 @@
 <div class="login-container">
   <div class="login-left">
     <img src="../../../assets/Logo.png" />
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
       <label for="email">Username or Email</label>
       <input
         pInputText
@@ -21,7 +21,7 @@
       />
       <button type="submit" class="btn btn-signin">Sign In</button>
     </form>
-    <p>
+    <!-- <p>
       Don't have an account?
       <p-button
         (onClick)="signUp()"
@@ -29,6 +29,37 @@
         size="small"
         [link]="true"
       ></p-button>
-    </p>
+    </p> -->
+
+     <form class="waiting-list-form" [formGroup]="waitlistForm" (ngSubmit)="onWaitlistSubmit(waitlistForm.value)">
+    <b>Join Our Waitlist!</b>
+    <b>
+      Sign up to be notified as soon as Justice AI becomes available for use. We’ll keep you updated on the latest developments!</b> 
+      <input
+        pInputText
+        type="text"
+        formControlName="email"
+        id="email"
+        name="email"
+      />
+      <button type="submit" class="btn btn-signin">Join Now!</button>
+    </form>
+    <div
+          class="alert"
+          *ngIf="
+            !waitlistForm.get('email').valid &&
+            waitlistForm.get('email').touched
+          "
+        >
+          Invalid email
+        </div>
+        <div
+        class="success"
+        *ngIf="success"
+      >
+      Your email has been successfully added to the waitlist. Thank you for your interest!
+
+      </div>
   </div>
+  
 </div>
