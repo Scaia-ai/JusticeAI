@@ -1,5 +1,5 @@
 import Role from "../models/Role.js";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createSuccess } from "../utils/success.js";
 import { createError } from "../utils/error.js";

@@ -43,8 +43,9 @@ app.use((obj, req, res, next)=>{
 
 })
 
-app.listen('8000', ()=>{
+const port = 3000;
+app.listen(port, '0.0.0.0', () => {
     connectMongoDB();
+    console.log(`Server running on port ${port}`);
     console.log("Connected to Backend!");
-
-})
+});
