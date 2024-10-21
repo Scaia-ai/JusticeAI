@@ -21,7 +21,9 @@ from azure.search.documents import SearchClient
 from azure.core.credentials import AzureKeyCredential
 from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationalRetrievalChain
-from langchain_openai import AzureChatOpenAI
+from fastapi import FastAPI, UploadFile, Form, HTTPException
+from langchain.llms import OpenAI  # Reemplazado para usar OpenAI GPT-4
+from langchain_community.chat_models import ChatOpenAI
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(global_config.LOG_FILE_NAME)
@@ -61,10 +63,8 @@ def set_default_executor():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-   set_default_executor()
-
-   
-
+    set_default_executor()
+    yield
 
 @retry(httpx.HTTPStatusError, tries=5, delay=1, backoff=2)
 async def get_embeddings_with_retry(llm, question, chat_history):
@@ -107,7 +107,7 @@ async def ask_question(
         filter_expression = "(" + " or ".join([f"case_id eq '{case_id}'" for case_id in case_ids]) + ")"
         logger.info(f"Constructed filter expression: {filter_expression}")
 
-        llm = AzureChatOpenAI(deployment_name=global_config.AZURE_SEARCH_DEPLOYMENT)
+        llm = ChatOpenAI(openai_api_key=global_config.OPENAI_API_KEY, model="gpt-4o")       
 
         CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template("""
         Given the following conversation and a follow-up question, rephrase the follow-up question to be a standalone question. 
@@ -219,6 +219,3 @@ async def remove_document_case_index(case_id: str = Form(...), document_id: str 
         search_client.delete_documents(documents=[{"id": doc_id}])
 
     return {"message": "Index cleaned successfully"}
-
-
-

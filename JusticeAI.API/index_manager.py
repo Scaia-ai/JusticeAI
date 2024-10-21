@@ -1,4 +1,5 @@
 from langchain_openai import AzureOpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings  
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 import global_config
 from langchain_community.vectorstores.azuresearch import AzureSearch
@@ -11,14 +12,9 @@ from azure.search.documents.indexes.models import (
 )
 
 def get_vector_store():
-    openai_credential = DefaultAzureCredential()
-    token_provider = get_bearer_token_provider(openai_credential, "https://cognitiveservices.azure.com/.default")
-    embeddings = AzureOpenAIEmbeddings(
-        azure_deployment=global_config.AZURE_OPENAI_EMBEDDING_DEPLOYMENT,
-        openai_api_version=global_config.AZURE_OPENAI_API_VERSION,
-        azure_endpoint=global_config.AZURE_OPENAI_ENDPOINT,
-        api_key=global_config.AZURE_OPENAI_KEY,
-        azure_ad_token_provider=token_provider if not global_config.AZURE_OPENAI_KEY else None
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=global_config.OPENAI_API_KEY,  # Use your OpenAI API key
+        model="text-embedding-ada-002",  # Specify the model you want to use
     )
 
     fields = [
