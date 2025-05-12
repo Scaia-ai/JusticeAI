@@ -75,6 +75,7 @@ node_modules/
 CaseFiles
 CaseFiles/*
 *.pdf
+server/files/
 server/files/*
 
 dist
