@@ -74,6 +74,8 @@ node_modules/
 .vscode
 CaseFiles
 CaseFiles/*
+*.pdf
+server/files/*
 
 dist
 dist/*
