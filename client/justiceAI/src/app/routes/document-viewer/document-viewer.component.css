@@ -1,0 +1,41 @@
+.document-detail-container {
+  display: flex;
+  height: 100%;
+  }
+
+.pdf-viewer {
+  flex: 3;
+  border-right: 1px solid #ddd;
+  overflow: hidden;
+  position: relative;
+}
+
+.sidebar {
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  resize: horizontal;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+pre {
+  background: #f4f4f4;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 1rem;
+}
+li {
+  margin-bottom: 0.25rem;
+}

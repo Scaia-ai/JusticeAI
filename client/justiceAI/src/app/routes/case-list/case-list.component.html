@@ -106,6 +106,7 @@
   [style]="{ width: '60rem' }"
 >
   <app-case-files [case]="selectedCase" [files]="caseFiles"
+   (viewDocumentEvent)="viewDocument($event)"
   ></app-case-files>
 </p-dialog>
 <p-dialog
@@ -116,5 +117,17 @@
 >
   <app-case-chat  [case]="selectedCase"></app-case-chat>
 </p-dialog>
+
+ <p-dialog
+  [header]="selectedCaseFile?.name"
+  maximizable="true"
+  [modal]="true"
+  [(visible)]="visible_caseFile"
+  [style]="{ width: '90%', height: '100%' }"
+>
+  <app-document-viewer [caseFile]="selectedCaseFile">
+  </app-document-viewer>
+</p-dialog>
+
 
 <p-confirmDialog />

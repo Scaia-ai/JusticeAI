@@ -8,7 +8,7 @@ import time
 import httpx
 from retry import retry
 from typing import List, Tuple
-from fastapi import FastAPI, UploadFile, Form, HTTPException
+from fastapi import FastAPI, UploadFile, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 from opencensus.ext.azure.log_exporter import AzureLogHandler  
@@ -22,8 +22,9 @@ from azure.core.credentials import AzureKeyCredential
 from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationalRetrievalChain
 from fastapi import FastAPI, UploadFile, Form, HTTPException
-from langchain.llms import OpenAI  # Reemplazado para usar OpenAI GPT-4
 from langchain_community.chat_models import ChatOpenAI
+import llm
+import ocr
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(global_config.LOG_FILE_NAME)
@@ -219,3 +220,27 @@ async def remove_document_case_index(case_id: str = Form(...), document_id: str 
         search_client.delete_documents(documents=[{"id": doc_id}])
 
     return {"message": "Index cleaned successfully"}
+
+
+@app.post("/extract_data/", status_code=201, summary="Extract data")
+async def extract_data(request: Request):
+    try:
+        logger.info("****Extract data")
+        content = await request.body()
+        text = content.decode("utf-8")
+        result = llm.process_file(text)
+        return result
+    except Exception as e:
+        logger.exception(e)
+        raise HTTPException(status_code=500, detail="An error occurred while processing the request.")
+    
+
+@app.post("/ocr/", status_code=201, summary="Extract text")
+async def ocrPdf(document: UploadFile = Form(...)):
+    try:
+        logger.info("**** Extracting text from uploaded document")
+        result = ocr.perform_ocr_from_stream(document.file)
+        return {"text": result}
+    except Exception as e:
+        logger.exception("OCR processing failed")
+        raise HTTPException(status_code=500, detail="An error occurred while processing the request.")

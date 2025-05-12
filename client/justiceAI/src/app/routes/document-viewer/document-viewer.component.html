@@ -1,0 +1,39 @@
+<div class="document-detail-container">
+  <!-- LEFT: PDF Viewer -->
+  <div class="pdf-viewer">
+    <ngx-extended-pdf-viewer
+      [src]="pdfUrl"
+      useBrowserLocale="true"
+      [showSidebarButton]="false"
+      [showZoomButtons]="true"
+      [showRotateButton]="false" 
+      [showTextEditor]="false"
+      [showStampEditor]="false"
+      [showPresentationModeButton]="false"
+      [showOpenFileButton]="false"
+      [showSecondaryToolbarButton]="false"
+      [showHighlightEditor]="false"
+      [showDownloadButton]="false"
+      [showPrintButton]="false"
+      [showDrawEditor]="false"
+      height="90vh"
+      [textLayer]="true"
+      [showZoomButtons]="true"
+      [zoom]="'auto'">
+    </ngx-extended-pdf-viewer>
+
+
+  </div>
+  <div class="sidebar" pResizableColumn>
+    <div class="section">
+      <h2>Extracted Entities</h2>
+      <div [innerHTML]="formattedJsonHtml"></div>
+    </div>
+
+    <div class="section">
+      <h2>Redacted Narrative</h2>
+    <pre>{{ narrative }}</pre>
+</div>
+  </div>
+  
+</div>

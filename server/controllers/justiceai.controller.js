@@ -1,7 +1,11 @@
 import { createError } from "../utils/error.js";
 import { createSuccess } from "../utils/success.js";
 import FormData from 'form-data';
+import { createReadStream } from 'fs'; // For stream (used in OCR)
 import axios from 'axios';
+import fs from 'fs/promises';
+import path from 'path';
+import { Buffer } from 'buffer';
 
 export const getAnswer = async (req, res, next) => {
     try {
@@ -27,6 +31,29 @@ export const getAnswer = async (req, res, next) => {
         return next(createError(500, "Error fetching answer."));
     }
 };
+
+export const getExtractedData = async (content) => {
+    try {
+        if (!content || typeof content !== 'string') {
+            throw new Error("Bad Request: 'content' must be a string.");
+        }
+
+        const response = await axios.post(
+            `${process.env.JUSTICE_AI_URL}/extract_data/`,
+            content, // plain text
+            {
+                headers: {
+                    'Content-Type': 'text/plain',
+                }
+            }
+        );
+        return response.data
+    } catch (error) {
+        console.error("getExtractedData error:", error.response?.data || error.message);
+        throw new Error("Entity extraction failed.");
+    }
+};
+
 export const cleanIndexByCase = async (req, res, next) => {
     try {
         const { caseId } = req.body;
@@ -50,9 +77,30 @@ export const cleanIndexByCase = async (req, res, next) => {
         } else {
             console.error('Error Message:', error.message);
         }
-        throw new Error('Failed to upload document.');
+        return next(createError(500, "Error cleaning Index."));
     }
 };
+
+export const performOcrRequest = async (filePath) => {
+  try {
+    const form = new FormData();
+    form.append('document', createReadStream(filePath)); // ✅ streaming works
+
+    const response = await axios.post(
+      `${process.env.JUSTICE_AI_URL}/ocr/`,
+      form,
+      {
+        headers: form.getHeaders()
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("OCR request failed:", error.response?.data || error.message);
+    throw new Error("OCR extraction failed.");
+  }
+};
+
 export const removeDocumentFromIndex = async (req, res, next) => {
     try {
         const { caseId, documentId } = req.body;

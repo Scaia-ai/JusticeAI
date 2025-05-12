@@ -13,6 +13,10 @@ const FileSchema = mongoose.Schema(
         extractedText:{
             type: String,
             required: true
+        }, 
+        extractedEntities:{
+            type: String,
+            required: false
         },
         case: {
             type: Schema.Types.ObjectId,

@@ -4,4 +4,5 @@ export class CaseFile extends Base {
   name: string;
   guid: string;
   case: string;
+  extractedEntities: string;
 }

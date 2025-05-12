@@ -56,6 +56,14 @@
             {{ file.name }}
           </td>
           <td>
+             <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-eye"
+              (click)="viewFile(file)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
             <button
               pButton
               pRipple
@@ -80,4 +88,4 @@
     <h3 class="blockUI-message">{{spinner_message}}</h3>
   </p-blockUI>
   
-  
+

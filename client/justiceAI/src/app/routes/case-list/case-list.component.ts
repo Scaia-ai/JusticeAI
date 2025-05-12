@@ -17,6 +17,7 @@ import { CaseFilesComponent } from '../case-files/case-files.component';
 import { FileService } from 'src/app/services/file.service';
 import { CaseFile } from 'src/app/models/file';
 import { CaseChatComponent } from '../case-chat/case-chat.component';
+import { DocumentViewerComponent } from '../document-viewer/document-viewer.component';
 
 @Component({
   selector: 'app-case-list',
@@ -30,6 +31,7 @@ import { CaseChatComponent } from '../case-chat/case-chat.component';
     CaseFilesComponent,
     BlockUIModule,
     ProgressSpinnerModule,
+    DocumentViewerComponent,
     CaseChatComponent,
     PanelModule,
   ],
@@ -46,6 +48,8 @@ export class CaseListComponent implements OnInit {
   visible: boolean = false;
   visible_files: boolean = false;
   visible_chat: boolean =false;
+  visible_caseFile: boolean = false;
+  selectedCaseFile: CaseFile;
   loading = false;
   cases: Case[] = [];
   caseFiles: CaseFile[] = [];
@@ -78,6 +82,11 @@ export class CaseListComponent implements OnInit {
 
   createCase(): void {
     this.visible = true;
+  }
+
+  viewDocument(file) {
+    this.selectedCaseFile = file
+    this.visible_caseFile = true;
   }
 
   async saveCase(_case) {

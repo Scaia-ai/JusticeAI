@@ -11,10 +11,11 @@ import {
 import { Case } from 'src/app/models/case';
 import { environment } from 'src/environments/environment';
 import { FileService } from 'src/app/services/file.service';
-import { MessageShowService } from 'src/app/services/message-show.service';
 import { ConfirmationService } from 'primeng/api';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DocumentViewerComponent } from '../document-viewer/document-viewer.component';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-case-files',
@@ -22,6 +23,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   imports: [TableModule, FileUploadModule, CommonModule,
     BlockUIModule,
     ProgressSpinnerModule,
+    DialogModule,
+    DocumentViewerComponent
   ],
   templateUrl: './case-files.component.html',
   styleUrl: './case-files.component.css'
@@ -32,6 +35,7 @@ export class CaseFilesComponent {
   uploadedFiles: any[] = [];
   @Input() case: Case;
   @Input() files: CaseFile[];
+  @Output() viewDocumentEvent = new EventEmitter();
 
   @ViewChild('fileUpload') fileUpload: any;
   apiUrl = environment.baseApiUrl
@@ -59,18 +63,28 @@ export class CaseFilesComponent {
       rejectIcon: 'none',
 
       accept: async () => {
-        this.spinner_message = "Deleting file ...";
-        this.loading = true;
-        await this.fileService.deleteFile(fileId);
-        await this.fileService.removeDocumentFromIndex(this.case._id, fileId);
+        try {
+            this.spinner_message = "Deleting file ...";
+            this.loading = true;
+            await this.fileService.deleteFile(fileId);
+            await this.fileService.removeDocumentFromIndex(this.case._id, fileId);
 
-        this.files = this.files.filter((file) => file._id !== fileId);
-        this.loading = false;
+            this.files = this.files.filter((file) => file._id !== fileId);
+            this.loading = false;
+        } catch (error) {
+          console.error('Error deleting file:', error);
+        }
+        finally {
+          this.loading = false;
+        }
       },
       reject: () => {},
     });
   }
 
+  viewFile(file) {
+    this.viewDocumentEvent.emit(file);
+  }
 
   uploadFile() {
     if (this.selectedFile) {
@@ -90,13 +104,14 @@ export class CaseFilesComponent {
         observe: 'events',
       })
       .subscribe({
-        next: (event) => {
+        next: async (event) => {
           if (event.type === HttpEventType.Response) {
             console.log('Completed');
             this.selectedFile = null;
             this.uploadedFiles = [];
             this.fileUpload.clear();
             file._id = event.body["data"].toString();
+            file = await this.fileService.getFileById(file._id);
             if(!this.files)
               this.files = [];
             this.files.push(file);

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { Case } from '../models/case';
 import { environment } from '../../environments/environment';
 import { setParams } from '../utilities/helper-functions';
@@ -23,6 +23,20 @@ export class FileService {
 
   async deleteFile(fileId: string): Promise<void> {
     await firstValueFrom(this.httpClient.delete(this.apiUrl + '/api/file/delete/' + fileId));
+  }
+
+  getPdf(fileId: string): Observable<Blob> {
+    return this.httpClient.get(this.apiUrl + `/api/file/${fileId}/pdf`, {
+      responseType: 'blob' 
+    });
+  }
+
+  async getFileById(fileId: string): Promise<CaseFile> {
+    const res: any = await firstValueFrom(
+          this.httpClient.get<CaseFile>(this.apiUrl + `/api/file/${fileId}`)
+       );
+    return res.data;
+
   }
 
   async removeDocumentFromIndex(
